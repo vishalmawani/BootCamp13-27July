@@ -39,12 +39,12 @@ public class LoginServiceImp implements LoginServiceI{
 	@Override
 	public Integer loginAdmin(String email, String admin_password) {
 		if(!adminDAO.checkAdminByEmail(email))
-				throw new NotRegisteredException("Admin is not registered with ths email");
+				throw new NotRegisteredException("Admin is not registered with this email");
 		
 		Admin admin=adminDAO.FindByAdminEmail(email);
 		
 		if(admin.getPassword().equals(admin_password)==false)
-				throw new NotRegisteredException("Admin is not registered with ths email");
+				throw new NotRegisteredException("Admin is not registered with this email");
 		return admin.getAdminId();
 	}
 
