@@ -1,0 +1,101 @@
+package com.cg.bookstore.service;
+
+import java.util.List;
+
+import javax.transaction.Transactional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.stereotype.Service;
+
+import com.cg.bookstore.dao.*;
+import com.cg.bookstore.entities.Admin;
+import com.cg.bookstore.entities.CustomerInformation;
+import com.cg.bookstore.entities.QueryResponseDTO;
+import com.cg.bookstore.exceptions.UserNotFoundException;
+import com.cg.bookstore.exceptions.InvalidCredentialsException;
+import com.cg.bookstore.exceptions.NoCustomerFoundException;
+
+
+@Service
+@Transactional
+public class BookStoreServiceImp implements BookStoreService {
+    
+	@Autowired
+	private BookStoreDao bookStoreDao;
+	
+    public BookStoreServiceImp()
+    {}
+    
+	@Override
+	public List<Admin> getUserList(int adminId) {
+		// TODO Auto-generated method stub
+		Admin admin=bookStoreDao.getAdmin(adminId);
+		if(admin==null)
+			throw new UserNotFoundException("User might be removed or not available");
+		List<Admin> userList;
+		userList=bookStoreDao.retreiveList(adminId);
+		return userList;
+	}
+
+	
+	
+//	public void deleteCustomer(String email)
+//	{
+//		CustomerInformation customer=bookStoreDao.getCustomerByEmail(email);
+//		boolean customerReviewStatus = bookStoreDao.getCustomerReviewStatus(customer.getCustomerId());
+//		
+//		if(customerReviewStatus==true)
+//		{
+//			//throw exception
+//		}
+//		
+//		boolean orderInformationStatus = bookStoreDao.getOrderInformationStatus(customer.getCustomerId());
+//		
+//		if(orderInformationStatus==true)
+//		{
+//			//throw exception
+//		}
+//		
+//		bookStoreDao.deleteCustomer(customer);
+//	}
+	
+	
+	
+	@Override
+	public QueryResponseDTO getAllCustomers(String adminEmail, String adminPassword, int adminId,
+			int pageNumber) {
+		if(pageNumber>0)
+		{
+			if(adminId>0)
+			{
+					Admin admin=bookStoreDao.getAdmin(adminId);
+					if(admin==null)
+					{
+						throw new InvalidCredentialsException("Invalid credentials!");
+					}
+					else if(admin.getEmail().equals(adminEmail) && admin.getPassword().equals(adminPassword))
+					{
+						return bookStoreDao.getAllCustomers(pageNumber);
+					}
+					else
+					{
+						throw new InvalidCredentialsException("Invalid Credentials!");
+					}
+			}
+			else
+			{
+				throw new InvalidCredentialsException("Credentials are invalid");
+			}
+		}
+		else
+		{
+			throw new NoCustomerFoundException("Invalid page numnber");
+		}
+	}
+
+}
