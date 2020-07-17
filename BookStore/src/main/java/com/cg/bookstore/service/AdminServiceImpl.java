@@ -18,9 +18,12 @@ public class AdminServiceImpl implements AdminService {
 	AdminDao adminDao;
 
 	@Override
-	public boolean addAdmin(AdminDto adminDto) {
+	public String addAdmin(AdminDto adminDto) throws AdminException {
 
-		return adminDao.addAdmin(adminDto);
+		if(adminDao.addAdmin(adminDto))
+			return "Admin Added";
+		else 
+			throw new AdminException("Admin not added");
 	}
 
 	@Override

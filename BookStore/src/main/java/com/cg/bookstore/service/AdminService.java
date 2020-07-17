@@ -6,6 +6,6 @@ import com.cg.bookstore.exceptions.AdminException;
 
 public interface AdminService {
 
-	public boolean addAdmin(AdminDto adminDto);
+	public String addAdmin(AdminDto adminDto) throws AdminException;
 	public String editAdmin(long adminId, Admin admin) throws AdminException;
 }

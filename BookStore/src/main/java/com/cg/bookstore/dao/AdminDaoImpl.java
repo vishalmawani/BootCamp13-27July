@@ -16,8 +16,13 @@ public class AdminDaoImpl implements AdminDao {
 
 	@Override
 	public boolean addAdmin(AdminDto adminDto) {
-		entityManager.persist(adminDto.getAdmin());
-		return true;
+		if(adminDto == null)
+			return false;
+		else
+			{
+			entityManager.persist(adminDto.getAdmin());
+			return true;
+			}
 	}
 
 	@Override

@@ -31,8 +31,13 @@ public class AdminController {
 	}
 	
 	@PostMapping("/addAdmin")
-	public boolean addAdmin(@RequestBody AdminDto adminDto) {
-		adminService.addAdmin(adminDto);
-		return true;
+	public String addAdmin(@RequestBody AdminDto adminDto) throws AdminException {
+		
+		try{
+			return adminService.addAdmin(adminDto);
+		}catch(Exception exception) {
+			throw new AdminException(exception.getMessage());
+		}
+		
 	}
 }
