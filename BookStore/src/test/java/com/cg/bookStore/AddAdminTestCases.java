@@ -18,7 +18,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import com.cg.bookStore.entities.Admin;
 import com.cg.bookStore.exceptions.AdminServiceException;
-import com.cg.bookStore.service.AdminServiceI;
+import com.cg.bookStore.service.BookStoreServiceI;
 import com.cg.bookStore.web.BookStoreController;
 
 @RunWith(SpringRunner.class)
@@ -30,7 +30,7 @@ public class AddAdminTestCases {
 	private MockMvc mockMvc;
 	
 	@MockBean
-	private AdminServiceI adminServie;
+	private BookStoreServiceI adminServie;
 	
 	@Test
 	public void checkNameEmptyValue() throws Exception

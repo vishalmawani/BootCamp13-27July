@@ -17,7 +17,7 @@ public class Admin {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="AdminIdGenerator")
-	private int adminId;
+	private Long adminId;
 	
 	@Column(name="FULLNAME")
 	@Size(min=8,max=30)
@@ -35,7 +35,10 @@ public class Admin {
 		super();
 	}
 
-	public Admin(int adminId, @Size(min = 8, max = 30) String fullName, @Size(min = 10, max = 64) String email,
+	
+
+	
+	public Admin(Long adminId, @Size(min = 8, max = 30) String fullName, @Size(min = 10, max = 64) String email,
 			@Size(min = 8, max = 16) String password) {
 		super();
 		this.adminId = adminId;
@@ -44,11 +47,14 @@ public class Admin {
 		this.password = password;
 	}
 
-	public int getAdminId() {
+
+
+
+	public Long getAdminId() {
 		return adminId;
 	}
 
-	public void setAdminId(int adminId) {
+	public void setAdminId(Long adminId) {
 		this.adminId = adminId;
 	}
 
