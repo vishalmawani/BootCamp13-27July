@@ -5,5 +5,5 @@ import com.cg.bookStore.exceptions.AdminServiceException;
 
 public interface AdminServiceI {
 
-	public Admin addAdmin(Admin admin) throws AdminServiceException;
+	public String addAdmin(Admin admin) throws AdminServiceException;
 }

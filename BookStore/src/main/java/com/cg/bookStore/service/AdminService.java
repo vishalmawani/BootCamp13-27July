@@ -1,8 +1,13 @@
 package com.cg.bookStore.service;
 
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,29 +23,32 @@ public class AdminService implements AdminServiceI{
 	@Autowired
 	AdminDaoI adminDaoI;
 	
+	@PersistenceContext
+	EntityManager entityManager;
+	
 	String regexForPassword = "^(?=.*[0-9])"
             + "(?=.*[a-z])(?=.*[A-Z])"
             + "(?=.*[@#$%^&+=])"
             + "(?=\\S+$).{8,20}$";
 	
-	String regexForEmail="^[a-zA-Z0-9_+&*-]+(?:\\."+ 
-            "[a-zA-Z0-9_+&*-]+)*@" + 
-            "(?:[a-zA-Z0-9-]+\\.)+[a-z" + 
-            "A-Z]{2,7}$";
 	
 	Pattern patternForPassword = Pattern.compile(regexForPassword);
-	Pattern patternForEmail=Pattern.compile(regexForEmail); 
+	
 	@Override
-	public Admin addAdmin(Admin admin) throws AdminServiceException {
+	public String addAdmin(Admin admin) throws AdminServiceException {
+
+		Query query=entityManager.createQuery("from Admin where email='"+admin.getEmail()+"'");
+		List<Admin> list=query.getResultList();
+		if(list.isEmpty()==false)
+		{
+			throw new AdminServiceException("Please enter new email address");
+		}
 		
 		if(admin.getEmail().equals("") || (admin.getEmail().length()<11 || admin.getEmail().length()>64))
 		{
-//			Matcher matcher = patternForEmail.matcher(admin.getEmail());
-//			if(matcher.matches()==false) 
-//			{
-//				throw new AdminServiceException("Email Can't Be Empty");
-//			}
+            throw new AdminServiceException("Please Enter Valid Email");
 		}
+		
 		else if(admin.getFullName().equals("") || (admin.getFullName().length()<8 || admin.getFullName().length()>30) )
 		{
 			throw new AdminServiceException("Name Can't Be Empty having length between 8 and 30");
@@ -49,19 +57,22 @@ public class AdminService implements AdminServiceI{
 		
 		else if(admin.getPassword().equals("") || (admin.getPassword().length()<8 || admin.getPassword().length()>16))
 		{
-			Matcher matcher = patternForPassword.matcher(admin.getPassword());
-		
-			if(matcher.matches()==false)
-			{
-			throw new AdminServiceException("Password Must have  alteast one special ,one numeric, one capital and length between 8 to 16 ");
-		
-			}
+			throw new AdminServiceException("Password shouldn't be empty having length between 8 to 16 ");
+
 		}
-		else
+		
+		Matcher matcher = patternForPassword.matcher(admin.getPassword());
+		
+		System.out.println(matcher.matches());
+	    if(matcher.matches()==false)
 		{
-		adminDaoI.addAdmin(admin);
+		throw new AdminServiceException("Password Must have  alteast one special ,one numeric, one capital");
+	
 		}
-		return admin;
+		
+		adminDaoI.addAdmin(admin);
+		
+		return "Admin Created";
 	}
 
 	
