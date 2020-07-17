@@ -2,6 +2,7 @@ package com.cg.bookStore.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.cg.bookStore.dao.BookStoreDao;
 import com.cg.bookStore.entities.CustomerInformation;
@@ -13,7 +14,7 @@ import com.cg.bookStore.exception.UserException;
                   account,calling other functions to perform services 
  * Created On     16-July-2020
  ********************************************************************************/
-
+@Transactional
 @Service
 public class BookStoreServiceImplementation implements BookStoreService{
 	

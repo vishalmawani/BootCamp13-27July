@@ -3,8 +3,10 @@ package com.cg.bookStore.dao;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import javax.transaction.Transactional;
+
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.cg.bookStore.entities.Admin;
 import com.cg.bookStore.entities.CustomerInformation;
 import com.cg.bookStore.entities.CustomerReview;
@@ -68,32 +70,39 @@ public class BookStoreDaoImplementation implements BookStoreDao{
 		
 		try {
 			String Qstr="Select review From CustomerReview review Join review.customerDetails customer Where customer.customerId=:customerId";
-			TypedQuery query = entityManager.createQuery(Qstr, CustomerReview.class);
+			TypedQuery <CustomerReview>query = entityManager.createQuery(Qstr, CustomerReview.class);
 			query.getSingleResult();
 		}
 		catch(Exception e){
 			
-			throw new UserException("Cannot delete as customer has given a review");
+			return false;
 		}
-		return false;
+	
+		return true;
 	}
 	
 	@Override
 	public boolean getOrderInformationStatus(int customerId) throws UserException{ 
 		
 		//returns false if no order is found
+		String status;
 		
 		try {
-			String Qstr="Select order From OrderInformation order Join order.customerDetails customer Where customer.customerId=:customerId";
-			TypedQuery query = entityManager.createQuery(Qstr, OrderInformation.class);
-			query.getSingleResult();
+			String Qstr="Select bookStoreOrder From OrderInformation bookStoreOrder Join bookStoreOrder.customerDetails customer Where customer.customerId=:customerId";
+			TypedQuery<OrderInformation> query = entityManager.createQuery(Qstr, OrderInformation.class).setParameter("customerId", customerId);
+			status=query.getSingleResult().getOrderStatus();
 		}
 		catch(Exception e){
 			
-			throw new UserException("Cannot delete as Customer has an active order");
+			return false;
 		}
-		return false;
+		if(status.equals("Delivered"))
+		{
+			return false;
+		}
+		return true;
 	}
+		
 	
 	@Override
 	public boolean deleteCustomer(CustomerInformation customer){

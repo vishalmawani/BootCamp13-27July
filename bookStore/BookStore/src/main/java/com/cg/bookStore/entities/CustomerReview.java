@@ -3,6 +3,8 @@ package com.cg.bookStore.entities;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -33,6 +35,10 @@ public class CustomerReview {
 	@Column(name="review_comment",length=300)
 	@Size(min=100,max=300)
 	private String reviewComment;
+	
+	@ManyToOne
+	@JoinColumn(name="customer_id", referencedColumnName = "customer_id")
+	private CustomerInformation customerDetails = new CustomerInformation();
 
 	public int getRatingId() {
 		return ratingId;

@@ -5,7 +5,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cg.bookStore.exception.UserException;
@@ -38,7 +37,7 @@ public class BookStoreController {
 **********************************************************************************/
 
 	@DeleteMapping("/user/{adminId}")
-	public ResponseEntity<String> deleteUser(@PathVariable int adminId, @PathVariable String email) throws UserException {
+	public ResponseEntity<String> deleteUser(@PathVariable int adminId) throws UserException {
 		boolean result = bookStoreService.deleteUser(adminId);
 		if (result) {
 			response = "{\"data\":\"User Account deleted Sucessfully\"}";
@@ -46,14 +45,14 @@ public class BookStoreController {
 		return new ResponseEntity<String>(response, HttpStatus.OK);
 	}
 	
-	@DeleteMapping("/user/{customerId}")
-	public ResponseEntity<String> deleteCustomer(@PathVariable int customerId, @PathVariable String email) throws UserException {
+	@DeleteMapping("/customer/{email}")
+	public ResponseEntity<String> deleteCustomer(@PathVariable String email) throws UserException {
 		boolean result = bookStoreService.deleteCustomer(email);
 		if (result) {
 			response = "{\"data\":\"Customer Account deleted Sucessfully\"}";
 		} 
 		return new ResponseEntity<String>(response, HttpStatus.OK);
-	}
+	} 
 
 }
 

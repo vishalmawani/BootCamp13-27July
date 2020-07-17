@@ -46,7 +46,6 @@ public class CustomerInformation {
 	private String city;
 
 	@Column(name = "zip_code")
-	@Size(min=3, max=24)
 	private Integer zipCode;
 
 	@Column(name = "country")
@@ -60,12 +59,12 @@ public class CustomerInformation {
 		super();
 	}
 	
-	public CustomerInformation(int customerId, @Size(min = 10, max = 64) String emailAddress,
+	public CustomerInformation( @Size(min = 10, max = 64) String emailAddress,
 			@Size(min = 8, max = 30) String fullName, @Size(min = 8, max = 16) String password,
 			@Size(min = 10, max = 15) String phoneNumber, @Size(min = 3, max = 32) String city,
-			@Size(min = 3, max = 24) Integer zipCode, @Size(min = 3, max = 64) String country, LocalDate registerDate) {
+			Integer zipCode, @Size(min = 3, max = 64) String country, LocalDate registerDate) {
 		super();
-		this.customerId = customerId;
+		
 		this.emailAddress = emailAddress;
 		this.fullName = fullName;
 		this.password = password;
