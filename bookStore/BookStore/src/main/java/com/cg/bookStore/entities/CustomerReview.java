@@ -2,9 +2,10 @@ package com.cg.bookStore.entities;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -21,6 +22,8 @@ public class CustomerReview {
 	
 	@Id
 	@Column(name="review_id")
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="reviewIdGenerator")
+	@SequenceGenerator(name="reviewIdGenerator", initialValue=1000)
 	private int ratingId;
 	
 	@Column(name="book_rating")
@@ -36,9 +39,16 @@ public class CustomerReview {
 	@Size(min=100,max=300)
 	private String reviewComment;
 	
-	@ManyToOne
-	@JoinColumn(name="customer_id", referencedColumnName = "customer_id")
-	private CustomerInformation customerDetails = new CustomerInformation();
+	@Column(name="customer_id")
+	private int customerId;
+	
+	public int getCustomerId() {
+		return customerId;
+	}
+
+	public void setCustomerId(int customerId) {
+		this.customerId = customerId;
+	}
 
 	public int getRatingId() {
 		return ratingId;

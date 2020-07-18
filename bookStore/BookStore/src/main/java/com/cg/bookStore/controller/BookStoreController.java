@@ -45,6 +45,16 @@ public class BookStoreController {
 		return new ResponseEntity<String>(response, HttpStatus.OK);
 	}
 	
+/**********************************************************************************
+* Method        deleteCustomer
+* Description   to call the deleteCustomer to perform deletion task
+* returns       boolean response as customer account deleted successfully if account is
+*               deleted otherwise it will throw an exception
+* Created By    Vaishali Tiwari 
+* Created on    16-July-2020
+ * @throws UserException 
+**********************************************************************************/
+	
 	@DeleteMapping("/customer/{email}")
 	public ResponseEntity<String> deleteCustomer(@PathVariable String email) throws UserException {
 		boolean result = bookStoreService.deleteCustomer(email);

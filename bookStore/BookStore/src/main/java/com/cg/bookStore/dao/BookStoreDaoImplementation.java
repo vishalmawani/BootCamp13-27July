@@ -1,5 +1,7 @@
 package com.cg.bookStore.dao;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -48,6 +50,17 @@ public class BookStoreDaoImplementation implements BookStoreDao{
 		
 	}
 	
+
+	/********************************************************************************
+	 * Method            getCustomerByEmail 
+	 * Description       for getting the customer's detail by email id
+	 * return            returns the customer details if account exists
+	 *                   otherwise throws exception if account does not exists 
+	 * Created By        Vaishali Tiwari                   
+	 * Created on        16-July-2020
+	 
+	 **********************************************************************************/
+	
 	@Override
 	public CustomerInformation getCustomerByEmail(String email) throws UserException{
 		
@@ -65,26 +78,53 @@ public class BookStoreDaoImplementation implements BookStoreDao{
 		return customer;
 	}
 	
+
+	/********************************************************************************
+	 * Method            getCustomerReviewStatus 
+	 * Description       for getting the customer's review status
+	 * returns boolean   returns true if customer has provided a review otherwise 
+	 *                   returns false
+	 * Created By        Vaishali Tiwari                   
+	 * Created on        16-July-2020
+	 
+	 **********************************************************************************/
 	@Override
-	public boolean getCustomerReviewStatus(int customerId) throws UserException{
+	
+	public boolean getCustomerReviewStatus(int customerId){
 		
-		try {
-			String Qstr="Select review From CustomerReview review Join review.customerDetails customer Where customer.customerId=:customerId";
-			TypedQuery <CustomerReview>query = entityManager.createQuery(Qstr, CustomerReview.class);
-			query.getSingleResult();
+		List<CustomerReview> reviewList=null;
+		try{
+			String Qstr="Select review From CustomerReview review Where review.customerId=:customerId";
+		    TypedQuery<CustomerReview> query = entityManager.createQuery(Qstr,CustomerReview.class).setParameter("customerId",customerId);
+		    reviewList=query.getResultList();
 		}
-		catch(Exception e){
-			
+		catch(Exception e){  
+				
 			return false;
+			
+		}
+		if(reviewList.isEmpty()){
+			
+				return false;
+		}
+		
+			return true;
+			
 		}
 	
-		return true;
-	}
+	/********************************************************************************
+	 * Method            getOrderInformationStatus 
+	 * Description       for getting the customer's order detail
+	 * returns boolean   returns true if order status is Processing or Shipped 
+	 *                   otherwise returns false if order status is completed
+	 * Created By        Vaishali Tiwari                   
+	 * Created on        16-July-2020
+	 
+	 **********************************************************************************/
 	
 	@Override
-	public boolean getOrderInformationStatus(int customerId) throws UserException{ 
+	public boolean getOrderInformationStatus(int customerId){ 
 		
-		//returns false if no order is found
 		String status;
 		
 		try {
@@ -102,6 +142,15 @@ public class BookStoreDaoImplementation implements BookStoreDao{
 		}
 		return true;
 	}
+	
+	/********************************************************************************
+	 * Method            deleteCustomer 
+	 * Description       for deleting Customer account
+	 * returns boolean   returns true if account gets deleted
+	 * Created By        Vaishali Tiwari                   
+	 * Created on        16-July-2020
+	 
+	 **********************************************************************************/
 		
 	
 	@Override

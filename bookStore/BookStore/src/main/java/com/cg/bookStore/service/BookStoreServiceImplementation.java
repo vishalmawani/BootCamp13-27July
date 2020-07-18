@@ -21,11 +21,27 @@ public class BookStoreServiceImplementation implements BookStoreService{
 	@Autowired
 	BookStoreDao bookStoreDao;
 	
+	/********************************************************************************
+	 * Method            deleteUser 
+	 * Description       for deleting User account
+	 * Created By        Vaishali Tiwari                   
+	 * Created on        16-July-2020
+	 
+	 **********************************************************************************/
+	
 	@Override
 	public boolean deleteUser(int adminId) throws UserException
 	{
 		return bookStoreDao.deleteUser(adminId);
 	}
+	
+	/********************************************************************************
+	 * Method            deleteCustomer 
+	 * Description       for deleting Customer account
+	 * Created By        Vaishali Tiwari                   
+	 * Created on        16-July-2020
+	 
+	 **********************************************************************************/
 	
 	@Override
 	public boolean deleteCustomer(String email) throws UserException

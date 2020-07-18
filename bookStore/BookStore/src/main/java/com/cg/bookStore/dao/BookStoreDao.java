@@ -11,8 +11,8 @@ public interface BookStoreDao {
 
 	CustomerInformation getCustomerByEmail(String email) throws UserException;
 
-	boolean getCustomerReviewStatus(int customerId) throws UserException;
+	boolean getCustomerReviewStatus(int customerId);
 
-	boolean getOrderInformationStatus(int customerId) throws UserException;
+	boolean getOrderInformationStatus(int customerId);
 
 }
