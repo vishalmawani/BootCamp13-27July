@@ -96,7 +96,7 @@ public class BookStoreDaoImplementation implements BookStoreDao{
 			
 			return false;
 		}
-		if(status.equals("Delivered"))
+		if(status.equals("Completed"))
 		{
 			return false;
 		}
