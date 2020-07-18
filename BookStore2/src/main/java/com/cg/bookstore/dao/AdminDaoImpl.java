@@ -8,15 +8,6 @@ import org.springframework.stereotype.Repository;
 import com.cg.bookstore.dto.AdminDto;
 import com.cg.bookstore.entities.Admin;
 
-/************************************************************************************
- *          @author          Vishal Mawani
- *          
- *          Description       AdminDao class provides functionality to persist new admin
- *          				 and edit admin.
-                             
-  *         Created Date     15-JUL-2020
- ************************************************************************************/
-
 @Repository
 public class AdminDaoImpl implements AdminDao {
 

@@ -7,14 +7,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 
-/************************************************************************************
- *          @author          Vishal Mawani
- *          
- *          Description      Admin Entity class provides all the variables and contains respective
- *          				 getters and setters and constructors.
-                             
-  *         Created Date    14-JUL-2020
- ************************************************************************************/
 @Entity
 public class Admin {
 

@@ -10,15 +10,6 @@ import com.cg.bookstore.dto.AdminDto;
 import com.cg.bookstore.entities.Admin;
 import com.cg.bookstore.exceptions.AdminException;
 
-/************************************************************************************
- * 			@author 			Vishal Mawani
- * 
- *         Description   		AdminService class provides functionality to add an admin,
- *         						edit an admin and throws corresponding
- *         						exceptions.
- * 
- *         Created Date 		15-JUL-2020
- ************************************************************************************/
 @Service
 @Transactional
 public class AdminServiceImpl implements AdminService {
