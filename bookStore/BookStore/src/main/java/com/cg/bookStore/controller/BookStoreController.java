@@ -36,13 +36,10 @@ public class BookStoreController {
  * @throws UserException 
 **********************************************************************************/
 
-	@DeleteMapping("/user/{adminId}")
+	@DeleteMapping("/admin/deleteUser/{adminId}")
 	public ResponseEntity<String> deleteUser(@PathVariable int adminId) throws UserException {
-		boolean result = bookStoreService.deleteUser(adminId);
-		if (result) {
-			response = "{\"data\":\"User Account deleted Sucessfully\"}";
-		} 
-		return new ResponseEntity<String>(response, HttpStatus.OK);
+		bookStoreService.deleteUser(adminId); 
+		return new ResponseEntity<String>("User Account deleted", HttpStatus.OK);
 	}
 	
 /**********************************************************************************
@@ -55,13 +52,10 @@ public class BookStoreController {
  * @throws UserException 
 **********************************************************************************/
 	
-	@DeleteMapping("/customer/{email}")
+	@DeleteMapping("/admin/deleteCustomer/{email}")
 	public ResponseEntity<String> deleteCustomer(@PathVariable String email) throws UserException {
-		boolean result = bookStoreService.deleteCustomer(email);
-		if (result) {
-			response = "{\"data\":\"Customer Account deleted Sucessfully\"}";
-		} 
-		return new ResponseEntity<String>(response, HttpStatus.OK);
+		bookStoreService.deleteCustomer(email);
+		return new ResponseEntity<String>("Customer Account deleted", HttpStatus.OK);
 	} 
 
 }
