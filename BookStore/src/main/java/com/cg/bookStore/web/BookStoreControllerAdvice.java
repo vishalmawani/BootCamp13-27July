@@ -5,18 +5,18 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import com.cg.bookStore.exceptions.AdminServiceException;
-import com.cg.bookStore.exceptions.AdminServiceExceptionMessage;
+import com.cg.bookStore.exceptions.BookStoreServiceException;
+import com.cg.bookStore.exceptions.BookStoreServiceExceptionMessage;
 
 
 
 @RestControllerAdvice
 public class BookStoreControllerAdvice {
 
-	@ExceptionHandler(value= {AdminServiceException.class})
+	@ExceptionHandler(value= {BookStoreServiceException.class})
 	@ResponseStatus(code=HttpStatus.BAD_REQUEST)
-	public AdminServiceExceptionMessage handleAdminServiceException(AdminServiceException exception) {
-		return new AdminServiceExceptionMessage(exception.getMessage());
+	public BookStoreServiceExceptionMessage handleAdminServiceException(BookStoreServiceException exception) {
+		return new BookStoreServiceExceptionMessage(exception.getMessage());
 	}
 	
 

@@ -1,7 +1,5 @@
 package com.cg.bookStore;
 
-import javax.swing.Spring;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -17,7 +15,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import com.cg.bookStore.entities.Admin;
-import com.cg.bookStore.exceptions.AdminServiceException;
 import com.cg.bookStore.service.BookStoreServiceI;
 import com.cg.bookStore.web.BookStoreController;
 
@@ -73,7 +70,7 @@ public class AddAdminTestCases {
 		String adminJson= "{\r\n" + 
 				"    \"fullName\": \"qwqerytrt\",\r\n" + 
 				"    \"email\": \"efsfsf@gmail.com\",\r\n" + 
-				"    \"password\": \"dgdgryyu1@S\"\r\n" + 
+				"    \"password\": \"dgdgryyu1@\"\r\n" + 
 				"    }";
 		String expectedResult="Password shouldn't be empty having length between 8 to 16";
 		Mockito.when(adminServie.addAdmin(Mockito.any(Admin.class))).thenReturn(expectedResult);
@@ -83,5 +80,7 @@ public class AddAdminTestCases {
 				
 		
 	}
+	
+	
 	
 }

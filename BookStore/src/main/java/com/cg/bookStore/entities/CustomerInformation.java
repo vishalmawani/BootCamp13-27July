@@ -11,6 +11,7 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.Size;
 
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -49,15 +50,18 @@ public class CustomerInformation {
 	@Size(min=3, max=32)
 	private String city;
 
-	@Column(name = "zip_code")
-	@Size(min=3, max=24)
-	private Integer zipCode;
+	@Column(name = "address", length = 128)
+	private String address;
+	
+	@Column(name="zip_code")
+	private int zipCode;
 
 	@Column(name = "country")
 	@Size(min=3, max=64)
 	private String country;
 	
 	@Column(name="register_date")
+	@CreationTimestamp
 	private LocalDate registerDate;
 	
 	public String getFullName() {
@@ -132,6 +136,15 @@ public class CustomerInformation {
 		this.registerDate = registerDate;
 	}
 
+	
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
 	public CustomerInformation(String emailAddress, String fullName, String password, String phoneNumber, String city,
 			Integer zipCode, String country, LocalDate registerDate) {
 		super();
@@ -144,8 +157,21 @@ public class CustomerInformation {
 		this.country = country;
 		this.registerDate = registerDate;
 	}
-	public CustomerInformation()
-	{}
+
+	public CustomerInformation() {
+		super();
+	}
+
+	@Override
+	public String toString() {
+		return "CustomerInformation [customerId=" + customerId + ", emailAddress=" + emailAddress + ", fullName="
+				+ fullName + ", password=" + password + ", phoneNumber=" + phoneNumber + ", city=" + city + ", address="
+				+ address + ", zipCode=" + zipCode + ", country=" + country + ", registerDate=" + registerDate + "]";
+	}
+	
+	
+	
+	
 
 	
 }
