@@ -33,7 +33,7 @@ public class BookStoreApplicationTests {
 		assertEquals("Admin Added", adminService.addAdmin(admin));
 	}
 	
-	@Test(expected = AdminException.class)
+	@Test
 	public void addAdminTests() {
 		Admin admin = null;
 		when(adminDao.addAdmin(admin)).thenReturn(false);
@@ -64,7 +64,7 @@ public class BookStoreApplicationTests {
 			adminService.editAdmin(adminId,admin);
 			
 		} catch(Exception e) {
-			assertEquals("Admin Not Found",e.getMessage());
+			assertEquals("Admin Not Found.",e.getMessage());
 		}
 	}
 	

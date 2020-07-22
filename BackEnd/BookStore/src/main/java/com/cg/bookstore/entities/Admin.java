@@ -6,37 +6,43 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.validation.constraints.*;
 
-/************************************************************************************
- *          @author          Vishal Mawani
- *          
- *          Description      Admin Entity class provides all the variables and contains respective
- *          				 getters and setters and constructors.
-                             
-  *         Created Date    14-JUL-2020
- ************************************************************************************/
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+
+
 @Entity
+@Table(name="bookstore_admin")
+@DynamicUpdate
+@DynamicInsert
 public class Admin {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "adminId_generator")
-	@SequenceGenerator(name = "adminId_generator", initialValue = 101, allocationSize = 1)
-	private long adminId;
-
-	@Column(length = 64)
+	@Column(name="admin_id")
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="adminIdGenerator")
+	@SequenceGenerator(name="adminIdGenerator", initialValue=100)
+	private int adminId;
+	
+	
+	@Column(name="email")
+	@Size(min=10, max=64)
 	private String email;
-
-	@Column(length = 30)
+	
+	@Column(name="fullName")
+	@Size(min=6, max= 16)
 	private String fullName;
-
-	@Column(length = 16)
+	
+	@Column(name="password")
+	@Size(min=6, max= 16)
 	private String password;
 
-	public long getAdminId() {
+	public int getAdminId() {
 		return adminId;
 	}
 
-	public void setAdminId(long adminId) {
+	public void setAdminId(int adminId) {
 		this.adminId = adminId;
 	}
 
@@ -64,23 +70,15 @@ public class Admin {
 		this.password = password;
 	}
 
-	@Override
-	public String toString() {
-		return "Admin [adminId=" + adminId + ", email=" + email + ", fullName=" + fullName + ", password=" + password
-				+ "]";
-	}
-
-	public Admin(long adminId, String email, String fullName, String password) {
-		
-		this.adminId = adminId;
+	public Admin(String email, String fullName, String password) {
+		super();
 		this.email = email;
 		this.fullName = fullName;
 		this.password = password;
 	}
-
-	public Admin() {
-		
-	}
+	public Admin()
+	{}
 	
 
 }
+
