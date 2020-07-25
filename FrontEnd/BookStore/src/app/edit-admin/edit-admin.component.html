@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+
+    <header>
+      <img src="../assets/BookstoreAdminLogo.png" alt="logo">
+      <ul>
+        <li><a>Home</a></li>
+        <li><a>Users</a></li>
+        <li><a>Categories</a></li>
+        <li><a>Books</a></li>
+        <li><a>Customers</a></li>
+        <li><a>Reviews</a></li>
+        <li><a>Orders</a></li>
+        <li><a>Sign Out</a></li><br>
+        <span>Welcome (Admin)</span>
+      </ul>
+      
+    </header>
+  
+    <br>
+
+<div class="card" style="width: 500px; margin:0 auto; margin-top: 50px; height: 400px;">
+    <section class="col-md-10 mx-auto mt-4">
+    <form #frm="ngForm" (ngSubmit)="editAdmin()">
+        <div class="mt-3"><b>Admin Id</b></div>
+        <div><input type="text" name="adminId" [(ngModel)]="adminId" readonly class="form-control" /></div>
+        
+        <div class="mt-3"><b>Email</b></div>
+        <div><input type="email" name="email" [(ngModel)]="email" readonly class="form-control"/></div>
+        
+        <div class="mt-3"><b>Password</b></div>
+        <div><input type="password" name="password" class="form-control" [(ngModel)]="password" required placeholder="Enter Test Name" #Name="ngModel" 
+             required minlength="3" maxlength="20" /></div>
+            <div class="alert alert-danger mt-3" *ngIf="Name.invalid && (Name.touched || Name.dirty)">
+                <div *ngIf="Name.errors.required">
+                  Please enter a password.
+                </div>
+                <div *ngIf="Name.errors.minlength">
+                 Password is too short.
+                </div>
+                <div *ngIf="Name.errors.maxlength"></div>
+            </div>
+            
+        <div class="mt-3" style="float: right; margin-bottom: 20px;"><input type="submit" [disabled]="!frm.valid" class="btn btn-dark" value="   Update   " title="Clicking this button will add a test with above information."/></div>
+    </form>
+    </section>
+    </div>
+    </body>
+    </html>
