@@ -1,4 +1,4 @@
-package com.cg.bookStore;
+package com.cg.bookstore;
 
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
@@ -7,7 +7,7 @@ public class ServletInitializer extends SpringBootServletInitializer {
 
 	@Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-		return application.sources(BookStoreApplication.class);
+		return application.sources(BookstoreApplication.class);
 	}
 
 }

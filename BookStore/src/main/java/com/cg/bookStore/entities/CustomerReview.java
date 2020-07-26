@@ -1,4 +1,4 @@
-package com.cg.bookStore.entities;
+package com.cg.bookstore.entities;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -7,15 +7,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
+
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 @Entity
-@Table(name="bookstore_customer_review")
+@Table(name="bookstore_customer_review1")
 @DynamicInsert
 @DynamicUpdate
 public class CustomerReview {
@@ -41,22 +40,6 @@ public class CustomerReview {
 	
 	@Column(name="customer_id")
 	private int customerId;
-	
-	public int getCustomerId() {
-		return customerId;
-	}
-
-	public void setCustomerId(int customerId) {
-		this.customerId = customerId;
-	}
-
-	public int getRatingId() {
-		return ratingId;
-	}
-
-	public void setRatingId(int ratingId) {
-		this.ratingId = ratingId;
-	}
 
 	public int getBookRating() {
 		return bookRating;
@@ -81,7 +64,26 @@ public class CustomerReview {
 	public void setReviewComment(String reviewComment) {
 		this.reviewComment = reviewComment;
 	}
-	
-	
+
+	public int getRatingId() {
+		return ratingId;
+	}
+
+	public int getCustomerId() {
+		return customerId;
+	}
+
+	public CustomerReview(int bookRating, String reviewHeadling, String reviewComment, int customerId) {
+		super();
+		this.bookRating = bookRating;
+		this.reviewHeadling = reviewHeadling;
+		this.reviewComment = reviewComment;
+		this.customerId = customerId;
+	}
+
+	public CustomerReview() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 
 }

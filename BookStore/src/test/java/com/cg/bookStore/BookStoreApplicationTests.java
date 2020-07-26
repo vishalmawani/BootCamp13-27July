@@ -1,16 +1,25 @@
-package com.cg.bookStore;
+package com.cg.bookstore;
 
-import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import com.cg.bookstore.dao.BookStoreDao;
+import com.cg.bookstore.service.BookStoreServiceImp;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest
-class BookStoreApplicationTests {
+public class BookstoreApplicationTests {
 
-	@Test
-	void contextLoads() {
-	}
+	
+	@Mock
+	BookStoreDao bookStoredao;
+	
+	@InjectMocks
+	private BookStoreServiceImp bookStoreService;
+	
+	
+	
 
 }

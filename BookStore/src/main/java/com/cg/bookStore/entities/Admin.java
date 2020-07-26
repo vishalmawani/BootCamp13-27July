@@ -1,4 +1,4 @@
-package com.cg.bookStore.entities;
+package com.cg.bookstore.entities;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -7,47 +7,36 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
+
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 
 @Entity
-@Table(name="bookstore_admin")
-@SequenceGenerator(name="AdminIdGenerator", initialValue=100)
+@Table(name="bookstore_admin1")
+@DynamicUpdate
+@DynamicInsert
 public class Admin {
-	
+
 	@Id
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="AdminIdGenerator")
+	@Column(name="admin_id")
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="adminIdGenerator")
+	@SequenceGenerator(name="adminIdGenerator", initialValue=100)
 	private int adminId;
 	
-	@Column(name="FULLNAME")
-	@Size(min=8,max=30)
-	private String fullName;
 	
-	@Column(name="EMAIL")
-	@Size(min=10,max=64)
+	@Column(name="email")
+	@Size(min=10, max=64)
 	private String email;
 	
-	@Column(name="PASSWORD")
-	@Size(min=8,max=16)
+	@Column(name="fullName")
+	@Size(min=6, max= 16)
+	private String fullName;
+	
+	@Column(name="password")
+	@Size(min=6, max= 16)
 	private String password;
-
-	public Admin() {
-		super();
-	}
-
-	
-
-	
-
-	public Admin(int adminId, @Size(min = 8, max = 30) String fullName, @Size(min = 10, max = 64) String email,
-			@Size(min = 8, max = 16) String password) {
-		super();
-		this.adminId = adminId;
-		this.fullName = fullName;
-		this.email = email;
-		this.password = password;
-	}
-
 
 	public int getAdminId() {
 		return adminId;
@@ -55,18 +44,6 @@ public class Admin {
 
 	public void setAdminId(int adminId) {
 		this.adminId = adminId;
-	}
-
-
-
-
-
-	public String getFullName() {
-		return fullName;
-	}
-
-	public void setFullName(String fullName) {
-		this.fullName = fullName;
 	}
 
 	public String getEmail() {
@@ -77,6 +54,14 @@ public class Admin {
 		this.email = email;
 	}
 
+	public String getFullName() {
+		return fullName;
+	}
+
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
+	}
+
 	public String getPassword() {
 		return password;
 	}
@@ -85,10 +70,15 @@ public class Admin {
 		this.password = password;
 	}
 
-	
+	public Admin(String email, String fullName, String password) {
+		super();
+		this.email = email;
+		this.fullName = fullName;
+		this.password = password;
+	}
+	public Admin()
+	{}
 	
 
-	
-	
-	
 }
+

@@ -1,34 +1,138 @@
+package com.cg.bookstore.service;
 
-package com.cg.bookStore.service;
-
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.cg.bookStore.dao.BookStoreDaoI;
-import com.cg.bookStore.entities.Admin;
-import com.cg.bookStore.entities.CustomerInformation;
-import com.cg.bookStore.entities.QueryResponseDTO;
-import com.cg.bookStore.exceptions.BookStoreServiceException;
+import com.cg.bookstore.dao.*;
+import com.cg.bookstore.entities.Admin;
+import com.cg.bookstore.entities.CustomerInformation;
+import com.cg.bookstore.entities.QueryResponseDTO;
+import com.cg.bookstore.exceptions.BookStoreServiceException;
+import com.cg.bookstore.exceptions.InvalidCredentialsException;
+import com.cg.bookstore.exceptions.NoCustomerFoundException;
+import com.cg.bookstore.exceptions.UserNotFoundException;
 
-@Transactional
+
 @Service
-public class BookStoreServiceImp implements BookStoreServiceI{
-
+@Transactional
+public class BookStoreServiceImp implements BookStoreService {
+    
 	@Autowired
-	BookStoreDaoI bookStoreDaoI;
+	private BookStoreDao bookStoreDao;
 	
-	@PersistenceContext
-	EntityManager entityManager;
+    public BookStoreServiceImp()
+    {}
+    
+
+	/*********************************************************************************************************************
+	 * Method: getUserList
+	 * Description: checks wheater the loggedin Admin is valid. and then ask for list of other admins
+	 * 
+	 * @param adminId:  Admin's userId
+	 * @throws UserNotFoundException: if the admin is an invalid or not present in the database.
+	 * @return userList: list containing the objects of admins from the database            
+     *  Created By - Kunal Maheshwari
+	 ***********************************************************************************************************************/
+	@Override
+	public List<Admin> getUserList(int adminId) {
+		Admin admin=bookStoreDao.getAdmin(adminId);
+		if(admin==null)
+			throw new UserNotFoundException("User might be removed or not available");
+		List<Admin> userList;
+		userList=bookStoreDao.retreiveList(adminId);
+		return userList;
+	}
+	
+	@Override
+	public void deleteCustomer(String email)
+	{
+		CustomerInformation customer=bookStoreDao.getCustomerByEmail(email);
+		boolean customerReviewStatus = bookStoreDao.getCustomerReviewStatus(customer.getCustomerId());
+		
+		if(customerReviewStatus==true)
+		{
+			throw new UserNotFoundException("hello message");
+		}
+		
+		boolean orderInformationStatus = bookStoreDao.getOrderInformationStatus(customer.getCustomerId());
+		
+		if(orderInformationStatus==true)
+		{
+			throw new UserNotFoundException("hello message");
+		}
+		
+		bookStoreDao.deleteCustomer(customer);
+	}
+	/********************************************************************************
+	 * Method            deleteUser 
+	 * Description       for deleting User account
+	 * Created By        Vaishali Tiwari                   
+	 * Created on        16-July-2020
+	 
+	 **********************************************************************************/
+	
+	
+	@Override
+	public boolean deleteUser(int adminId) throws BookStoreServiceException
+	{
+		return bookStoreDao.deleteUser(adminId);
+	}
+	
+	@Override
+	public QueryResponseDTO getAllCustomers(String adminEmail, String adminPassword, int adminId,
+			int pageNumber) {
+		if(pageNumber>0)
+		{
+			if(adminId>0)
+			{
+					Admin admin=bookStoreDao.getAdmin(adminId);
+					if(admin==null)
+					{
+						throw new InvalidCredentialsException("Invalid credentials!");
+					}
+					else if(admin.getEmail().equals(adminEmail) && admin.getPassword().equals(adminPassword))
+					{
+						return bookStoreDao.getAllCustomers(pageNumber);
+					}
+					else
+					{
+						throw new InvalidCredentialsException("Invalid Credentials!");
+					}
+			}
+			else
+			{
+				throw new InvalidCredentialsException("Credentials are invalid");
+			}
+		}
+		else
+		{
+			throw new NoCustomerFoundException("Invalid page numnber");
+		}
+	}
+	
+	
+	
+	@Override
+	public void editCustomer(String email,CustomerInformation customer)
+	{   
+		CustomerInformation updatedCustomer=bookStoreDao.getCustomerByEmail(email);
+		if(updatedCustomer==null)
+			throw new UserNotFoundException("Provided details can be updated as an user is not found");
+		updatedCustomer.setCity(customer.getCity());
+		updatedCustomer.setCountry(customer.getCountry());
+		updatedCustomer.setFullName(customer.getFullName());
+		updatedCustomer.setPhoneNumber(customer.getPhoneNumber());
+		updatedCustomer.setZipCode(customer.getZipCode());
+		
+		bookStoreDao.updateCustomer(updatedCustomer);
+	}
 	
 	String regexForPassword = "^(?=.*[0-9])"
             + "(?=.*[a-z])(?=.*[A-Z])"
@@ -38,7 +142,7 @@ public class BookStoreServiceImp implements BookStoreServiceI{
 	
 	Pattern patternForPassword = Pattern.compile(regexForPassword);
 	
-	/**********************************************************************************
+	/*//**********************************************************************************
 	* Method        addAdmin
 	* Description   This method will check all the validation and Exception if entered
 	*                 details are correct then only it will send data to dao layer
@@ -50,12 +154,9 @@ public class BookStoreServiceImp implements BookStoreServiceI{
 	
 	@Override
 	public String addAdmin(Admin admin) throws BookStoreServiceException {
-
-		Query query=entityManager.createQuery("from Admin where email='"+admin.getEmail()+"'");
 		
-		@SuppressWarnings("unchecked")
-		List<Admin> list=query.getResultList();
-		if(list.isEmpty()==false)
+		boolean check=bookStoreDao.checkAdminByEmail(admin.getEmail());
+		if(check==true)
 		{
 			throw new BookStoreServiceException("Entered email id is already exists");
 		}
@@ -84,7 +185,7 @@ public class BookStoreServiceImp implements BookStoreServiceI{
 		{
 		throw new BookStoreServiceException("Password Must have  alteast one special ,one numeric, one capital character");
 		}
-	    bookStoreDaoI.addAdmin(admin);
+	    bookStoreDao.saveAdmin(admin);
 	    return "New Admin Created Successfully";
 		
 	}
@@ -94,146 +195,58 @@ public class BookStoreServiceImp implements BookStoreServiceI{
 	
 	@Override
 	public String editAdmin(int adminId, Admin admin) throws BookStoreServiceException{
-		if(bookStoreDaoI.editAdmin(adminId, admin))
+		if(bookStoreDao.editAdmin(adminId, admin))
 			return "Admin updated";
 		else
 			throw new BookStoreServiceException("Admin not found.");
 	}
-	
-	
+
 	
 	@Override
-	public List<Admin> getUserList(int adminId) throws BookStoreServiceException {
-		Admin admin=bookStoreDaoI.getAdmin(adminId);
-		if(admin==null)
-			throw new BookStoreServiceException("User might be removed or not available");
-		List<Admin> userList;
-		userList=bookStoreDaoI.retreiveList(adminId);
-		return userList;
+	public boolean saveCustomer(CustomerInformation customer) {
+		
+		Date dateNow = new Date( );
+	    
+		/*************************************************************************************************************
+		 * To set date in specific format
+		 **************************************************************************************************************/
+		SimpleDateFormat objectOfSimpleDateFormat =new SimpleDateFormat ("hh:mm a',' E dd MMM yyyy");
+				
+				
+		if(customer.getEmailAddress()==null || customer.getCity()==null || customer.getCountry()==null || customer.getEmailAddress()==null || customer.getFullName()==null || 
+				customer.getPassword()==null || customer.getPhoneNumber()==null || customer.getZipCode()==0  )
+			throw new BookStoreServiceException("A data filed is found to be null");
+		
+	    customer.setRegisterDate(objectOfSimpleDateFormat.format(dateNow));
+		bookStoreDao.saveCustomer(customer);
+		
+		return true;
 	}
 	
-	
-	
 	@Override
-	public boolean save(CustomerInformation customerInfromation) {
-		return bookStoreDaoI.save(customerInfromation);
-	}
-	
-	
-	
-	
-	@Override
-	public Integer loginCustomer(String email, String password) throws BookStoreServiceException {
+	public CustomerInformation loginCustomer(String email, String password) throws BookStoreServiceException {
 		
-		if(!bookStoreDaoI.checkCustomeByEmail(email))
-				throw new BookStoreServiceException("Customer is not registered with this email");
+		if(!bookStoreDao.checkCustomerByEmail(email))
+				throw new BookStoreServiceException("You are not registered with this email");
 		
 		
-		CustomerInformation customer=bookStoreDaoI.FindByCustomerEmail(email);
+		CustomerInformation customer=bookStoreDao.getCustomerByEmail(email);
 		
 		if(customer.getPassword().equals(password)==false)
-				throw new BookStoreServiceException("The password does not match the Email provided");
+				throw new BookStoreServiceException("The password does not match with the Email provided");
 			
-		return customer.getCustomerId();
+		return customer;
 	}
 	
-	
-
 	@Override
-	public Integer loginAdmin(String email, String password) throws BookStoreServiceException {
-		if(!bookStoreDaoI.checkAdminByEmail(email))
-				throw new BookStoreServiceException("Admin is not registered with this email");
+	public Admin loginAdmin(String email, String password) throws BookStoreServiceException {
+		if(!bookStoreDao.checkAdminByEmail(email))
+				throw new BookStoreServiceException("You are not registered with this email");
 		
-		Admin admin=bookStoreDaoI.FindByAdminEmail(email);
+		Admin admin=bookStoreDao.getAdminByEmail(email);
 		
 		if(admin.getPassword().equals(password)==false)
-				throw new BookStoreServiceException("Admin is not registered with this email");
-		return admin.getAdminId();
+				throw new BookStoreServiceException("The password does not match with the Email provided");
+		return admin;
 	}
-
-	
-	
-	
-	
-	
-	@Override
-	public QueryResponseDTO getAllCustomers(String adminEmail, String adminPassword, int adminId,
-			int pageNumber) throws BookStoreServiceException {
-		if(pageNumber>0)
-		{
-			if(adminId>0)
-			{
-					Admin admin=bookStoreDaoI.getAdmin(adminId);
-					if(admin==null)
-					{
-						throw new BookStoreServiceException("Invalid credentials!");
-					}
-					else if(admin.getEmail().equals(adminEmail) && admin.getPassword().equals(adminPassword))
-					{
-						return bookStoreDaoI.getAllCustomers(pageNumber);
-					}
-					else
-					{
-						throw new BookStoreServiceException("Invalid Credentials!");
-					}
-			}
-			else
-			{
-				throw new BookStoreServiceException("Credentials are invalid");
-			}
-		}
-		else
-		{
-			throw new BookStoreServiceException("Invalid page numnber");
-		}
-	}
-
-	
-	/********************************************************************************
-	 * Method            deleteUser 
-	 * Description       for deleting User account
-	 * Created By        Vaishali Tiwari                   
-	 * Created on        16-July-2020
-	 
-	 **********************************************************************************/
-	
-	
-	@Override
-	public boolean deleteUser(int adminId) throws BookStoreServiceException
-	{
-		return bookStoreDaoI.deleteUser(adminId);
-	}
-	
-	/********************************************************************************
-	 * Method            deleteCustomer 
-	 * Description       for deleting Customer account
-	 * Created By        Vaishali Tiwari                   
-	 * Created on        16-July-2020
-	 
-	 **********************************************************************************/
-	
-	@Override
-	public boolean deleteCustomer(String email) throws BookStoreServiceException
-	{
-		CustomerInformation customer=bookStoreDaoI.getCustomerByEmail(email);
-		boolean customerReviewStatus = bookStoreDaoI.getCustomerReviewStatus(customer.getCustomerId());
-		
-		if(customerReviewStatus==true)
-		{
-			throw new BookStoreServiceException("Review found");
-		}
-		
-		boolean orderInformationStatus = bookStoreDaoI.getOrderInformationStatus(customer.getCustomerId());
-		
-		if(orderInformationStatus==true)
-		{
-			throw new BookStoreServiceException("Active Order");
-		}
-		
-		return bookStoreDaoI.deleteCustomer(customer);
-	}
-	
-	
 }
-	
-

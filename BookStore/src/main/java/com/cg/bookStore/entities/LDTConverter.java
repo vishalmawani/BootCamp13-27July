@@ -1,5 +1,4 @@
-package com.cg.bookStore.entities;
-
+package com.cg.bookstore.entities;
 import java.sql.Date;
 import java.time.LocalDate;
 

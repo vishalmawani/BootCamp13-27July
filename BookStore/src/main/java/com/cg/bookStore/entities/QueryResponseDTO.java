@@ -1,11 +1,11 @@
-package com.cg.bookStore.entities;
+package com.cg.bookstore.entities;
 
 import java.util.List;
 
 public class QueryResponseDTO {
 
-	private List<CustomerInformation> list;
-	 private int totalNoOfPages;
+	 private List<CustomerInformation> list;
+	 private long totalNoOfPages;
 	 private int currentPageNumber;
 	public List<CustomerInformation> getList() {
 		return list;
@@ -13,10 +13,10 @@ public class QueryResponseDTO {
 	public void setList(List<CustomerInformation> list) {
 		this.list = list;
 	}
-	public int getTotalNoOfPages() {
+	public long getTotalNoOfPages() {
 		return totalNoOfPages;
 	}
-	public void setTotalNoOfPages(int totalNoOfPages) {
+	public void setTotalNoOfPages(long totalNoOfPages) {
 		this.totalNoOfPages = totalNoOfPages;
 	}
 	public int getCurrentPageNumber() {
@@ -25,5 +25,7 @@ public class QueryResponseDTO {
 	public void setCurrentPageNumber(int currentPageNumber) {
 		this.currentPageNumber = currentPageNumber;
 	}
+	 
+	
 	 
 }
